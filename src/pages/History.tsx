@@ -34,7 +34,7 @@ const History: React.FC = () => {
               to={`/reader/${item.chapterId}`}
               className="group glass p-4 rounded-2xl flex gap-4 hover:bg-white/5 transition-all active:scale-[0.99]"
             >
-              <img src={item.coverUrl} className="w-20 aspect-[2/3] object-cover rounded-xl" alt="" />
+              <img src={item.coverUrl} className="w-20 aspect-[2/3] object-cover rounded-xl" alt="" referrerPolicy="no-referrer" />
               <div className="flex-1 flex flex-col justify-center gap-1">
                 <h3 className="font-bold line-clamp-1 group-hover:text-accent transition-colors">{item.mangaTitle}</h3>
                 <p className="text-xs text-white/50">Глава {item.chapterNum}</p>

@@ -65,6 +65,7 @@ const MangaDetail: React.FC = () => {
           src={coverUrl} 
           className="w-full h-full object-cover blur-md scale-110 opacity-30" 
           alt="" 
+          referrerPolicy="no-referrer"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
         
@@ -80,6 +81,7 @@ const MangaDetail: React.FC = () => {
              src={coverUrl} 
              className="w-32 aspect-[2/3] object-cover rounded-xl shadow-2xl glass border border-white/10"
              alt={manga.title}
+             referrerPolicy="no-referrer"
            />
            <div className="flex-1 pb-2">
               <h1 className="text-2xl font-bold line-clamp-2 mb-2 leading-tight">{manga.title}</h1>
