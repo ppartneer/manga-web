@@ -76,8 +76,21 @@ const transformManga = (m: MangaDexManga): Manga => {
   };
 };
 
-export const getCoverUrl = (mangaId: string, fileName?: string) => 
-  fileName ? `${COVER_BASE_URL}/${mangaId}/${fileName}.256.jpg` : 'https://placehold.co/400x600/121217/FFFFFF?text=No+Cover';
+export const getCoverUrl = (mangaId: string, fileName?: string) => {
+  if (!fileName) return 'https://placehold.co/400x600/121217/FFFFFF?text=No+Cover';
+  const url = `${COVER_BASE_URL}/${mangaId}/${fileName}.256.jpg`;
+  // Use weserv to bypass hotlinking in production
+  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
+    return `https://images.weserv.nl/?url=${encodeURIComponent(url.replace('https://', ''))}`;
+  }
+  return url;
+};
 
-export const getPageUrl = (hash: string, fileName: string) => 
-  `https://uploads.mangadex.org/data/${hash}/${fileName}`;
+export const getPageUrl = (hash: string, fileName: string) => {
+  const url = `https://uploads.mangadex.org/data/${hash}/${fileName}`;
+  // Use weserv to bypass hotlinking in production
+  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
+    return `https://images.weserv.nl/?url=${encodeURIComponent(url.replace('https://', ''))}`;
+  }
+  return url;
+};

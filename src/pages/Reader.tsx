@@ -89,6 +89,7 @@ const Reader: React.FC = () => {
             alt={`Page ${index + 1}`}
             className="w-full h-auto object-contain select-none"
             loading={index < 3 ? 'eager' : 'lazy'}
+            referrerPolicy="no-referrer"
           />
         ))}
       </div>
