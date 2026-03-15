@@ -30,7 +30,7 @@ export const fetchMangaDetails = async (id: string): Promise<Manga> => {
 export const fetchMangaChapters = async (mangaId: string, limit: number = 100, offset: number = 0): Promise<{ chapters: Chapter[], total: number }> => {
   // Prioritize Russian (ru) then English (en)
   const response = await fetch(
-    withProxy(`${API_BASE_URL}/manga/${mangaId}/feed?translatedLanguage[]=ru&translatedLanguage[]=en&limit=${limit}&offset=${offset}&order[chapter]=desc&includeExternalUrl=0`)
+    `${API_BASE_URL}/manga/${mangaId}/feed?translatedLanguage[]=ru&translatedLanguage[]=en&limit=${limit}&offset=${offset}&order[chapter]=desc&includeExternalUrl=0`
   );
   const json: MangaDexResponse<MangaDexChapter[]> = await response.json();
   
@@ -48,7 +48,7 @@ export const fetchMangaChapters = async (mangaId: string, limit: number = 100, o
 };
 
 export const fetchChapterPages = async (chapterId: string): Promise<{ hash: string, data: string[] }> => {
-  const response = await fetch(withProxy(`${API_BASE_URL}/at-home/server/${chapterId}`));
+  const response = await fetch(`${API_BASE_URL}/at-home/server/${chapterId}`);
   const json = await response.json();
   return {
     hash: json.chapter.hash,
@@ -86,11 +86,12 @@ const withImageProxy = (url: string) => {
 
 export const getCoverUrl = (mangaId: string, fileName?: string) => {
   if (!fileName) return 'https://placehold.co/400x600/121217/FFFFFF?text=No+Cover';
-  const url = `${COVER_BASE_URL}/${mangaId}/${fileName}.256.jpg`;
-  return withImageProxy(url);
+  return `${COVER_BASE_URL}/${mangaId}/${fileName}.256.jpg`;
 };
 
 export const getPageUrl = (hash: string, fileName: string) => {
-  const url = `https://uploads.mangadex.org/data/${hash}/${fileName}`;
-  return withImageProxy(url);
+  if (isProd) {
+    return `/mangadex-images/data/${hash}/${fileName}`;
+  }
+  return `https://uploads.mangadex.org/data/${hash}/${fileName}`;
 };
