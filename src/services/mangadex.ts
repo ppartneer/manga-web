@@ -6,7 +6,7 @@ const COVER_BASE_URL = 'https://uploads.mangadex.org/covers';
 // Helper to wrap URLs with a CORS proxy for production
 const withProxy = (url: string) => {
   if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
-    return `https://corsproxy.io/?${encodeURIComponent(url)}`;
+    return `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`;
   }
   return url;
 };
