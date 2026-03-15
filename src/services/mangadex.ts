@@ -1,27 +1,21 @@
 import { Manga, MangaDexResponse, MangaDexManga, Chapter, MangaDexChapter } from '../types/manga';
 
-const API_BASE_URL = 'https://api.mangadex.org';
-const COVER_BASE_URL = 'https://uploads.mangadex.org/covers';
+const isProd = typeof window !== 'undefined' && window.location.hostname !== 'localhost';
 
-// Helper to wrap URLs with a CORS proxy for production
-const withProxy = (url: string) => {
-  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
-    return `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`;
-  }
-  return url;
-};
+const API_BASE_URL = isProd ? '/mangadex-api' : 'https://api.mangadex.org';
+const COVER_BASE_URL = isProd ? '/mangadex-images/covers' : 'https://uploads.mangadex.org/covers';
 
 export const fetchMangaList = async (params: string = ''): Promise<Manga[]> => {
   // Always prioritize Russian translations and results, and include common content ratings
   const defaultParams = 'availableTranslatedLanguage[]=ru&includes[]=cover_art&includes[]=author&contentRating[]=safe&contentRating[]=suggestive&contentRating[]=erotica';
-  const response = await fetch(withProxy(`${API_BASE_URL}/manga?${defaultParams}&${params}`));
+  const response = await fetch(`${API_BASE_URL}/manga?${defaultParams}&${params}`);
   const json: MangaDexResponse<MangaDexManga[]> = await response.json();
   
   return json.data.map(transformManga);
 };
 
 export const fetchMangaDetails = async (id: string): Promise<Manga> => {
-  const response = await fetch(withProxy(`${API_BASE_URL}/manga/${id}?includes[]=cover_art&includes[]=author`));
+  const response = await fetch(`${API_BASE_URL}/manga/${id}?includes[]=cover_art&includes[]=author`);
   const json: MangaDexResponse<MangaDexManga> = await response.json();
   
   return transformManga(json.data);
@@ -74,14 +68,6 @@ const transformManga = (m: MangaDexManga): Manga => {
     tags: m.attributes.tags.map(t => t.attributes.name.en),
     rating: m.attributes.contentRating,
   };
-};
-
-// Helper to wrap image URLs with a proxy for production
-const withImageProxy = (url: string) => {
-  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
-    return `https://images1-focus-opensocial.googleusercontent.com/gadgets/proxy?container=focus&refresh=2592000&url=${encodeURIComponent(url)}`;
-  }
-  return url;
 };
 
 export const getCoverUrl = (mangaId: string, fileName?: string) => {
