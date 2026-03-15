@@ -3,17 +3,25 @@ import { Manga, MangaDexResponse, MangaDexManga, Chapter, MangaDexChapter } from
 const API_BASE_URL = 'https://api.mangadex.org';
 const COVER_BASE_URL = 'https://uploads.mangadex.org/covers';
 
+// Helper to wrap URLs with a CORS proxy for production
+const withProxy = (url: string) => {
+  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
+    return `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+  }
+  return url;
+};
+
 export const fetchMangaList = async (params: string = ''): Promise<Manga[]> => {
   // Always prioritize Russian translations and results, and include common content ratings
   const defaultParams = 'availableTranslatedLanguage[]=ru&includes[]=cover_art&includes[]=author&contentRating[]=safe&contentRating[]=suggestive&contentRating[]=erotica';
-  const response = await fetch(`${API_BASE_URL}/manga?${defaultParams}&${params}`);
+  const response = await fetch(withProxy(`${API_BASE_URL}/manga?${defaultParams}&${params}`));
   const json: MangaDexResponse<MangaDexManga[]> = await response.json();
   
   return json.data.map(transformManga);
 };
 
 export const fetchMangaDetails = async (id: string): Promise<Manga> => {
-  const response = await fetch(`${API_BASE_URL}/manga/${id}?includes[]=cover_art&includes[]=author`);
+  const response = await fetch(withProxy(`${API_BASE_URL}/manga/${id}?includes[]=cover_art&includes[]=author`));
   const json: MangaDexResponse<MangaDexManga> = await response.json();
   
   return transformManga(json.data);
@@ -22,7 +30,7 @@ export const fetchMangaDetails = async (id: string): Promise<Manga> => {
 export const fetchMangaChapters = async (mangaId: string, limit: number = 100, offset: number = 0): Promise<{ chapters: Chapter[], total: number }> => {
   // Prioritize Russian (ru) then English (en)
   const response = await fetch(
-    `${API_BASE_URL}/manga/${mangaId}/feed?translatedLanguage[]=ru&translatedLanguage[]=en&limit=${limit}&offset=${offset}&order[chapter]=desc&includeExternalUrl=0`
+    withProxy(`${API_BASE_URL}/manga/${mangaId}/feed?translatedLanguage[]=ru&translatedLanguage[]=en&limit=${limit}&offset=${offset}&order[chapter]=desc&includeExternalUrl=0`)
   );
   const json: MangaDexResponse<MangaDexChapter[]> = await response.json();
   
@@ -40,7 +48,7 @@ export const fetchMangaChapters = async (mangaId: string, limit: number = 100, o
 };
 
 export const fetchChapterPages = async (chapterId: string): Promise<{ hash: string, data: string[] }> => {
-  const response = await fetch(`${API_BASE_URL}/at-home/server/${chapterId}`);
+  const response = await fetch(withProxy(`${API_BASE_URL}/at-home/server/${chapterId}`));
   const json = await response.json();
   return {
     hash: json.chapter.hash,
