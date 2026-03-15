@@ -36,13 +36,13 @@ const MangaCard: React.FC<MangaCardProps> = ({ manga }) => {
         )}
       </Link>
       <div className="flex flex-col gap-1 px-1">
-        <Link to={`/manga/${manga.id}`} className="text-sm font-semibold line-clamp-1 group-hover:text-accent transition-colors">
+        <Link to={`/manga/${manga.id}`} className="text-[13px] sm:text-sm font-bold line-clamp-1 group-hover:text-accent transition-colors">
           {manga.title}
         </Link>
-        <div className="flex items-center justify-between text-[10px] text-white/50">
+        <div className="flex items-center justify-between text-[9px] sm:text-[10px] text-white/30 font-bold uppercase tracking-widest">
           <span>{manga.status}</span>
-          <div className="flex items-center gap-0.5">
-             <Star size={10} className="fill-yellow-500 text-yellow-500" />
+          <div className="flex items-center gap-0.5 text-accent/80">
+             <Star size={9} className="fill-accent text-accent" />
              <span>NEW</span>
           </div>
         </div>

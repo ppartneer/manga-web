@@ -81,7 +81,10 @@ const Reader: React.FC = () => {
       onClick={handleCenterClick}
       ref={containerRef}
     >
-      <div className="flex flex-col">
+      <div 
+        className="flex flex-col min-h-screen"
+        onClick={handleCenterClick}
+      >
         {pages.map((page, index) => (
           <img
             key={page}
@@ -99,33 +102,43 @@ const Reader: React.FC = () => {
         {showMenu && (
           <>
             <motion.div
-              initial={{ opacity: 0, y: -20 }}
+              initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className="fixed top-0 left-0 right-0 p-4 pt-12 glass z-[70] flex items-center justify-between"
+              exit={{ opacity: 0, y: -10 }}
+              className="fixed top-0 left-0 right-0 p-3 pt-10 sm:pt-12 glass z-[70] flex items-center justify-between safe-top"
             >
-              <button onClick={() => navigate(-1)} className="p-2 rounded-full glass border-white/5">
-                <ChevronLeft size={24} />
+              <button 
+                onClick={(e) => { e.stopPropagation(); navigate(-1); }} 
+                className="p-2 rounded-full glass border-white/5 active:scale-90 transition-transform"
+              >
+                <ChevronLeft size={20} className="sm:size-6" />
               </button>
-              <span className="font-bold">Глава</span>
-              <button className="p-2 rounded-full glass border-white/5">
-                <Bookmark size={20} />
+              <div className="flex flex-col items-center">
+                <span className="text-[10px] sm:text-xs text-white/50 uppercase tracking-widest font-bold">Глава {state?.chapterNum}</span>
+                <span className="text-xs sm:text-sm font-bold line-clamp-1 max-w-[200px]">{state?.mangaTitle}</span>
+              </div>
+              <button 
+                className="p-2 rounded-full glass border-white/5 active:scale-90 transition-transform"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <Bookmark size={18} className="sm:size-5" />
               </button>
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 20 }}
-              className="fixed bottom-0 left-0 right-0 p-6 glass z-[70] flex items-center justify-around border-t border-white/10"
+              exit={{ opacity: 0, y: 10 }}
+              className="fixed bottom-0 left-0 right-0 p-4 sm:p-6 glass z-[70] flex items-center justify-around border-t border-glass-border safe-bottom"
+              onClick={(e) => e.stopPropagation()}
             >
-               <div className="flex flex-col items-center gap-1">
-                  <Menu size={24} className="text-white/60" />
-                  <span className="text-[10px]">Список</span>
+               <div className="flex flex-col items-center gap-1 cursor-pointer group active:scale-90 transition-transform">
+                  <Menu size={20} className="sm:size-6 text-white/50 group-hover:text-accent transition-colors" />
+                  <span className="text-[9px] sm:text-[10px] font-bold text-white/40 group-hover:text-accent uppercase tracking-wider">Список</span>
                </div>
-               <div className="flex flex-col items-center gap-1">
-                  <SettingsIcon size={24} className="text-white/60" />
-                  <span className="text-[10px]">Настройки</span>
+               <div className="flex flex-col items-center gap-1 cursor-pointer group active:scale-90 transition-transform">
+                  <SettingsIcon size={20} className="sm:size-6 text-white/50 group-hover:text-accent transition-colors" />
+                  <span className="text-[9px] sm:text-[10px] font-bold text-white/40 group-hover:text-accent uppercase tracking-wider">Опции</span>
                </div>
             </motion.div>
           </>

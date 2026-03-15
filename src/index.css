@@ -4,9 +4,14 @@
 
 @layer base {
   body {
-    @apply bg-background text-white font-['Inter',_sans-serif] selection:bg-accent/30;
+    @apply bg-background text-white font-['Inter',_sans-serif] selection:bg-accent/30 antialiased overflow-x-hidden;
     -webkit-tap-highlight-color: transparent;
+    font-size: 16px;
   }
+
+  h1 { @apply text-2xl sm:text-3xl font-bold tracking-tight; }
+  h2 { @apply text-lg sm:text-2xl font-bold tracking-tight; }
+  h3 { @apply text-base sm:text-xl font-semibold; }
 
   /* Custom scrollbar */
   ::-webkit-scrollbar {
@@ -22,7 +27,7 @@
 
 @layer components {
   .glass {
-    @apply bg-glass backdrop-blur-md border border-glass-border shadow-xl;
+    @apply bg-glass/80 backdrop-blur-xl border border-glass-border shadow-2xl;
   }
   
   .glass-card {
@@ -30,11 +35,15 @@
   }
 
   .premium-button {
-    @apply bg-premium-gradient px-6 py-3 rounded-full font-semibold shadow-lg shadow-accent/20 active:scale-95 transition-all;
+    @apply bg-premium-gradient px-6 py-3 sm:px-8 sm:py-4 rounded-2xl sm:rounded-3xl font-bold shadow-lg shadow-accent/20 active:scale-95 transition-all text-sm sm:text-base;
   }
 
   .text-gradient {
     @apply bg-clip-text text-transparent bg-premium-gradient;
+  }
+
+  .container-padding {
+    @apply px-4 sm:px-8;
   }
 }
 

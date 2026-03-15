@@ -37,25 +37,25 @@ const Home: React.FC = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="flex flex-col gap-8 pb-8"
+      className="flex flex-col gap-6 sm:gap-10 pb-10"
     >
       {/* Continue Reading Section */}
       {history.length > 0 && (
         <section>
           <div className="flex items-center gap-2 mb-4">
-            <Clock size={20} className="text-accent" />
-            <h2 className="text-xl font-bold">Продолжить чтение</h2>
+            <Clock size={18} className="text-accent" />
+            <h2 className="text-lg font-bold">Продолжить чтение</h2>
           </div>
-          <div className="flex gap-4 overflow-x-auto pb-4 no-scrollbar -mx-4 px-4">
+          <div className="flex gap-3 overflow-x-auto pb-4 no-scrollbar -mx-4 px-4 snap-x">
             {history.slice(0, 5).map((item: any) => (
               <Link 
                 key={item.mangaId} 
                 to={`/reader/${item.chapterId}`}
-                className="flex-shrink-0 w-40 glass-card p-2 active:scale-95 transition-transform"
+                className="flex-shrink-0 w-32 sm:w-40 glass-card p-2 active:scale-95 transition-transform snap-start"
               >
-                <img src={item.coverUrl} className="w-full aspect-[2/3] object-cover rounded-lg mb-2" alt="" />
-                <p className="text-xs font-bold line-clamp-1">{item.mangaTitle}</p>
-                <p className="text-[10px] text-white/50">Глава {item.chapterNum}</p>
+                <img src={item.coverUrl} className="w-full aspect-[2/3] object-cover rounded-lg mb-2" alt="" referrerPolicy="no-referrer" />
+                <p className="text-[11px] font-bold line-clamp-1">{item.mangaTitle}</p>
+                <p className="text-[9px] text-white/50 tracking-wide">Глава {item.chapterNum}</p>
               </Link>
             ))}
           </div>
@@ -66,22 +66,22 @@ const Home: React.FC = () => {
       <section>
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <TrendingUp size={20} className="text-accent" />
-            <h2 className="text-xl font-bold">Популярное сейчас</h2>
+            <TrendingUp size={18} className="text-accent" />
+            <h2 className="text-lg font-bold">Популярное сейчас</h2>
           </div>
         </div>
         <MangaGrid manga={popular} isLoading={loading} />
       </section>
 
       {/* Featured Banner */}
-      <section className="relative h-48 rounded-3xl overflow-hidden glass">
-         <div className="absolute inset-0 bg-premium-gradient opacity-20"></div>
-         <div className="absolute inset-0 p-6 flex flex-col justify-center">
-            <h3 className="text-2xl font-bold mb-2">Откройте для себя новое</h3>
-            <p className="text-sm text-white/70 max-w-[200px]">Тысячи историй в вашем кармане каждый день.</p>
+      <section className="relative h-40 sm:h-48 rounded-2xl sm:rounded-3xl overflow-hidden glass group">
+         <div className="absolute inset-0 bg-premium-gradient opacity-10 group-hover:opacity-20 transition-opacity"></div>
+         <div className="absolute inset-0 p-5 sm:p-8 flex flex-col justify-center">
+            <h3 className="text-xl sm:text-2xl font-bold mb-1 sm:mb-2">Откройте для себя новое</h3>
+            <p className="text-[12px] sm:text-sm text-white/50 max-w-[180px] sm:max-w-[220px]">Тысячи историй в вашем кармане каждый день.</p>
          </div>
-         <div className="absolute right-0 top-0 bottom-0 w-1/2 flex items-center justify-center">
-            <Sparkles size={80} className="text-white/10 rotate-12" />
+         <div className="absolute right-0 top-0 bottom-0 w-1/3 flex items-center justify-center">
+            <Sparkles size={60} className="text-white/5 rotate-12 group-hover:scale-110 transition-transform" />
          </div>
       </section>
 
@@ -89,8 +89,8 @@ const Home: React.FC = () => {
       <section>
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <Sparkles size={20} className="text-accent" />
-            <h2 className="text-xl font-bold">Новинки</h2>
+            <Sparkles size={18} className="text-accent" />
+            <h2 className="text-lg font-bold">Новинки</h2>
           </div>
         </div>
         <MangaGrid manga={latest} isLoading={loading} />
