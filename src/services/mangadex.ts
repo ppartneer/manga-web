@@ -93,8 +93,7 @@ const transformManga = (m: MangaDexManga): Manga => {
 
 export const getCoverUrl = (mangaId: string, fileName?: string) => {
   if (!fileName) return 'https://placehold.co/400x600/121217/FFFFFF?text=No+Cover';
-  // Use wsrv.nl to proxy covers, avoiding ISP blocks in Russia on mobile
-  return `https://wsrv.nl/?url=uploads.mangadex.org/covers/${mangaId}/${fileName}.256.jpg`;
+  return `https://uploads.mangadex.org/covers/${mangaId}/${fileName}.256.jpg`;
 };
 
 export const getPageUrl = (baseUrl: string, hash: string, fileName: string) => {
