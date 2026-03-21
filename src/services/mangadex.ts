@@ -1,9 +1,7 @@
 import { Manga, MangaDexResponse, MangaDexManga, Chapter, MangaDexChapter } from '../types/manga';
 
-const isProd = typeof window !== 'undefined' && window.location.hostname !== 'localhost';
-
-const API_BASE_URL = isProd ? '/mangadex-api' : 'https://api.mangadex.org';
-const COVER_BASE_URL = isProd ? '/mangadex-images/covers' : 'https://uploads.mangadex.org/covers';
+const API_BASE_URL = 'https://api.mangadex.org';
+const COVER_BASE_URL = 'https://uploads.mangadex.org/covers';
 
 export const fetchMangaList = async (params: string = ''): Promise<Manga[]> => {
   // Always prioritize Russian translations and results, and include common content ratings
@@ -21,10 +19,10 @@ export const fetchMangaDetails = async (id: string): Promise<Manga> => {
   return transformManga(json.data);
 };
 
-export const fetchMangaChapters = async (mangaId: string, limit: number = 100, offset: number = 0): Promise<{ chapters: Chapter[], total: number }> => {
-  // Prioritize Russian (ru) then English (en)
+export const fetchMangaChapters = async (mangaId: string, limit: number = 500, offset: number = 0): Promise<{ chapters: Chapter[], total: number }> => {
+  // Only fetch Russian (ru) chapters to ensure we get a full list without taking up limits with other languages
   const response = await fetch(
-    `${API_BASE_URL}/manga/${mangaId}/feed?translatedLanguage[]=ru&translatedLanguage[]=en&limit=${limit}&offset=${offset}&order[chapter]=desc&includeExternalUrl=0`
+    `${API_BASE_URL}/manga/${mangaId}/feed?translatedLanguage[]=ru&limit=${limit}&offset=${offset}&order[chapter]=desc&includeExternalUrl=0`
   );
   const json: MangaDexResponse<MangaDexChapter[]> = await response.json();
   
@@ -41,10 +39,11 @@ export const fetchMangaChapters = async (mangaId: string, limit: number = 100, o
   };
 };
 
-export const fetchChapterPages = async (chapterId: string): Promise<{ hash: string, data: string[] }> => {
+export const fetchChapterPages = async (chapterId: string): Promise<{ baseUrl: string, hash: string, data: string[] }> => {
   const response = await fetch(`${API_BASE_URL}/at-home/server/${chapterId}`);
   const json = await response.json();
   return {
+    baseUrl: json.baseUrl,
     hash: json.chapter.hash,
     data: json.chapter.data,
   };
@@ -72,12 +71,10 @@ const transformManga = (m: MangaDexManga): Manga => {
 
 export const getCoverUrl = (mangaId: string, fileName?: string) => {
   if (!fileName) return 'https://placehold.co/400x600/121217/FFFFFF?text=No+Cover';
-  return `${COVER_BASE_URL}/${mangaId}/${fileName}.256.jpg`;
+  // Use wsrv.nl to proxy covers, avoiding ISP blocks in Russia on mobile
+  return `https://wsrv.nl/?url=uploads.mangadex.org/covers/${mangaId}/${fileName}.256.jpg`;
 };
 
-export const getPageUrl = (hash: string, fileName: string) => {
-  if (isProd) {
-    return `/mangadex-images/data/${hash}/${fileName}`;
-  }
-  return `https://uploads.mangadex.org/data/${hash}/${fileName}`;
+export const getPageUrl = (baseUrl: string, hash: string, fileName: string) => {
+  return `${baseUrl}/data/${hash}/${fileName}`;
 };

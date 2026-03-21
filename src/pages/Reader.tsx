@@ -12,6 +12,7 @@ const Reader: React.FC = () => {
   const state = location.state as { mangaId: string; mangaTitle: string; chapterNum: string; coverUrl?: string } | null;
   const [pages, setPages] = useState<string[]>([]);
   const [hash, setHash] = useState('');
+  const [baseUrl, setBaseUrl] = useState('');
   const [loading, setLoading] = useState(true);
   const [showMenu, setShowMenu] = useState(false);
   const { addToHistory } = useHistory();
@@ -25,6 +26,7 @@ const Reader: React.FC = () => {
         const data = await fetchChapterPages(chapterId);
         setPages(data.data);
         setHash(data.hash);
+        setBaseUrl(data.baseUrl);
         // Reset scroll
         window.scrollTo(0, 0);
 
@@ -88,7 +90,7 @@ const Reader: React.FC = () => {
         {pages.map((page, index) => (
           <img
             key={page}
-            src={getPageUrl(hash, page)}
+            src={getPageUrl(baseUrl, hash, page)}
             alt={`Page ${index + 1}`}
             className="w-full h-auto object-contain select-none"
             loading={index < 3 ? 'eager' : 'lazy'}
