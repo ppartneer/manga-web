@@ -51,11 +51,12 @@ const Home: React.FC = () => {
               <Link 
                 key={item.mangaId} 
                 to={`/reader/${item.chapterId}`}
-                className="flex-shrink-0 w-32 sm:w-40 glass-card p-2 active:scale-95 transition-transform snap-start"
+                className="group flex-shrink-0 w-32 sm:w-40 glass-card p-2 active:scale-95 transition-all snap-start relative overflow-hidden"
               >
-                <img src={item.coverUrl} className="w-full aspect-[2/3] object-cover rounded-lg mb-2" alt="" referrerPolicy="no-referrer" />
-                <p className="text-[11px] font-bold line-clamp-1">{item.mangaTitle}</p>
-                <p className="text-[9px] text-white/50 tracking-wide">Глава {item.chapterNum}</p>
+                <div className="absolute inset-0 bg-premium-gradient opacity-0 group-hover:opacity-10 transition-opacity pointer-events-none"></div>
+                <img src={item.coverUrl} className="w-full aspect-[2/3] object-cover rounded-lg mb-2 shadow-md" alt="" referrerPolicy="no-referrer" />
+                <p className="text-[11px] font-bold line-clamp-1 group-hover:text-accent-light transition-colors">{item.mangaTitle}</p>
+                <p className="text-[9px] text-accent/80 tracking-wide font-medium">Глава {item.chapterNum}</p>
               </Link>
             ))}
           </div>
@@ -74,14 +75,15 @@ const Home: React.FC = () => {
       </section>
 
       {/* Featured Banner */}
-      <section className="relative h-40 sm:h-48 rounded-2xl sm:rounded-3xl overflow-hidden glass group">
-         <div className="absolute inset-0 bg-premium-gradient opacity-10 group-hover:opacity-20 transition-opacity"></div>
-         <div className="absolute inset-0 p-5 sm:p-8 flex flex-col justify-center">
-            <h3 className="text-xl sm:text-2xl font-bold mb-1 sm:mb-2">Откройте для себя новое</h3>
-            <p className="text-[12px] sm:text-sm text-white/50 max-w-[180px] sm:max-w-[220px]">Тысячи историй в вашем кармане каждый день.</p>
+      <section className="relative h-40 sm:h-52 rounded-2xl sm:rounded-3xl overflow-hidden glass group border border-accent/20 shadow-glow">
+         <div className="absolute inset-0 bg-premium-gradient opacity-15 group-hover:opacity-25 transition-opacity duration-700"></div>
+         <div className="absolute inset-0 p-5 sm:p-8 flex flex-col justify-center relative z-10">
+            <h3 className="text-xl sm:text-3xl font-bold mb-1 sm:mb-2 text-white drop-shadow-md">Откройте для себя новое</h3>
+            <p className="text-[12px] sm:text-sm text-white/80 max-w-[180px] sm:max-w-[280px] drop-shadow">Тысячи историй в вашем кармане каждый день.</p>
          </div>
-         <div className="absolute right-0 top-0 bottom-0 w-1/3 flex items-center justify-center">
-            <Sparkles size={60} className="text-white/5 rotate-12 group-hover:scale-110 transition-transform" />
+         <div className="absolute right-[-10%] top-[-20%] bottom-0 w-2/3 flex items-center justify-center pointer-events-none overflow-hidden">
+            <div className="absolute inset-0 bg-accent/20 blur-3xl rounded-full mix-blend-screen animate-pulse-slow"></div>
+            <Sparkles size={100} className="text-white/10 rotate-12 group-hover:scale-110 group-hover:rotate-45 transition-all duration-700" />
          </div>
       </section>
 

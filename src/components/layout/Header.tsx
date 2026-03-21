@@ -13,7 +13,8 @@ const Header: React.FC = () => {
       className="fixed top-0 left-0 right-0 h-14 sm:h-16 glass z-50 flex items-center px-4 sm:px-6 justify-between safe-top"
     >
       <Link to="/" className="flex items-center gap-2 group">
-        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-premium-gradient flex items-center justify-center text-white font-bold text-lg sm:text-xl shadow-lg shadow-accent/20 group-active:scale-90 transition-transform">
+        <div className="relative w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-premium-gradient flex items-center justify-center text-white font-bold text-lg sm:text-xl shadow-glow group-hover:shadow-glow-lg group-active:scale-90 transition-all duration-300">
+          <div className="absolute inset-0 bg-white/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
           M
         </div>
         <span className="text-lg sm:text-xl font-bold tracking-tight text-gradient hidden xs:block sm:block">Manga Premium</span>

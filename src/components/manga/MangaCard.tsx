@@ -26,8 +26,19 @@ const MangaCard: React.FC<MangaCardProps> = ({ manga }) => {
           loading="lazy"
           referrerPolicy="no-referrer"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
-           <span className="text-xs font-medium text-white/90 line-clamp-2">{manga.description}</span>
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
+           <div className="flex flex-col gap-1 w-full">
+             {manga.tags && manga.tags.length > 0 && (
+               <div className="flex flex-wrap gap-1 mb-1">
+                 {manga.tags.slice(0, 2).map((tag, i) => (
+                   <span key={i} className="text-[8px] uppercase tracking-wider font-bold bg-accent/80 text-white px-1.5 py-0.5 rounded-sm">
+                     {tag}
+                   </span>
+                 ))}
+               </div>
+             )}
+             <span className="text-xs font-medium text-white/90 line-clamp-2">{manga.description || 'Нет описания'}</span>
+           </div>
         </div>
         {manga.rating && (
           <div className="absolute top-2 right-2 px-2 py-1 rounded-md glass backdrop-blur-sm text-[10px] font-bold uppercase tracking-wider">
@@ -41,8 +52,8 @@ const MangaCard: React.FC<MangaCardProps> = ({ manga }) => {
         </Link>
         <div className="flex items-center justify-between text-[9px] sm:text-[10px] text-white/30 font-bold uppercase tracking-widest">
           <span>{manga.status}</span>
-          <div className="flex items-center gap-0.5 text-accent/80">
-             <Star size={9} className="fill-accent text-accent" />
+          <div className="flex items-center gap-0.5 text-accent-light/90">
+             <Star size={9} className="fill-accent-light text-accent-light" />
              <span>NEW</span>
           </div>
         </div>
