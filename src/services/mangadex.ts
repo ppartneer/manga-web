@@ -22,7 +22,7 @@ export const fetchMangaDetails = async (id: string): Promise<Manga> => {
 export const fetchMangaChapters = async (mangaId: string, limit: number = 500, offset: number = 0): Promise<{ chapters: Chapter[], total: number }> => {
   // First fetch to get total & first batch
   const response = await fetch(
-    `${API_BASE_URL}/manga/${mangaId}/feed?translatedLanguage[]=ru&limit=${limit}&offset=${offset}&order[chapter]=desc&includeExternalUrl=0`
+    `${API_BASE_URL}/manga/${mangaId}/feed?translatedLanguage[]=ru&translatedLanguage[]=en&limit=${limit}&offset=${offset}&order[chapter]=desc&includeExternalUrl=0`
   );
   const json: MangaDexResponse<MangaDexChapter[]> = await response.json();
   let allData = json.data;
@@ -34,7 +34,7 @@ export const fetchMangaChapters = async (mangaId: string, limit: number = 500, o
     // Cap at 1500 chapters total to avoid MangaDex rate limiting (5 req/sec threshold)
     for (let currentOffset = limit; currentOffset < Math.min(total, 1500); currentOffset += limit) {
       promises.push(
-        fetch(`${API_BASE_URL}/manga/${mangaId}/feed?translatedLanguage[]=ru&limit=${limit}&offset=${currentOffset}&order[chapter]=desc&includeExternalUrl=0`)
+        fetch(`${API_BASE_URL}/manga/${mangaId}/feed?translatedLanguage[]=ru&translatedLanguage[]=en&limit=${limit}&offset=${currentOffset}&order[chapter]=desc&includeExternalUrl=0`)
           .then(res => res.json())
       );
     }
@@ -97,5 +97,6 @@ export const getCoverUrl = (mangaId: string, fileName?: string) => {
 };
 
 export const getPageUrl = (baseUrl: string, hash: string, fileName: string) => {
-  return `${baseUrl}/data/${hash}/${fileName}`;
+  // Always use the main uploads server to bypass At-Home node IP token restrictions on proxy
+  return `https://uploads.mangadex.org/data/${hash}/${fileName}`;
 };
