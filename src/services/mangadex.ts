@@ -93,10 +93,10 @@ const transformManga = (m: MangaDexManga): Manga => {
 
 export const getCoverUrl = (mangaId: string, fileName?: string) => {
   if (!fileName) return 'https://placehold.co/400x600/121217/FFFFFF?text=No+Cover';
-  return `https://uploads.mangadex.org/covers/${mangaId}/${fileName}.256.jpg`;
+  return `/mangadex-uploads/covers/${mangaId}/${fileName}.256.jpg`;
 };
 
 export const getPageUrl = (baseUrl: string, hash: string, fileName: string) => {
-  // Always use the main uploads server to bypass At-Home node IP token restrictions on proxy
-  return `https://uploads.mangadex.org/data/${hash}/${fileName}`;
+  // Always use the Vercel/Vite same-origin proxy to completely wipe out iOS Safari third-party tracking prevention and hotlinking protection
+  return `/mangadex-uploads/data/${hash}/${fileName}`;
 };
