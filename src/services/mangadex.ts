@@ -20,14 +20,36 @@ export const fetchMangaDetails = async (id: string): Promise<Manga> => {
 };
 
 export const fetchMangaChapters = async (mangaId: string, limit: number = 500, offset: number = 0): Promise<{ chapters: Chapter[], total: number }> => {
-  // Only fetch Russian (ru) chapters to ensure we get a full list without taking up limits with other languages
+  // First fetch to get total & first batch
   const response = await fetch(
     `${API_BASE_URL}/manga/${mangaId}/feed?translatedLanguage[]=ru&limit=${limit}&offset=${offset}&order[chapter]=desc&includeExternalUrl=0`
   );
   const json: MangaDexResponse<MangaDexChapter[]> = await response.json();
+  let allData = json.data;
+  const total = json.total || 0;
+
+  // Automatically fetch remaining chapters if there are more than the limit
+  if (total > limit) {
+    const promises = [];
+    // Cap at 1500 chapters total to avoid MangaDex rate limiting (5 req/sec threshold)
+    for (let currentOffset = limit; currentOffset < Math.min(total, 1500); currentOffset += limit) {
+      promises.push(
+        fetch(`${API_BASE_URL}/manga/${mangaId}/feed?translatedLanguage[]=ru&limit=${limit}&offset=${currentOffset}&order[chapter]=desc&includeExternalUrl=0`)
+          .then(res => res.json())
+      );
+    }
+    try {
+      const results = await Promise.all(promises);
+      results.forEach(res => {
+        if (res.data) allData = allData.concat(res.data);
+      });
+    } catch (e) {
+      console.warn("Some chapter pages failed to load due to rate limiting");
+    }
+  }
   
   return {
-    chapters: json.data.map(c => ({
+    chapters: allData.map(c => ({
       id: c.id,
       title: c.attributes.title || `Глава ${c.attributes.chapter}`,
       chapterNum: c.attributes.chapter,
