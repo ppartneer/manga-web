@@ -1,6 +1,6 @@
 import { Manga, MangaDexResponse, MangaDexManga, Chapter, MangaDexChapter } from '../types/manga';
 
-const API_BASE_URL = 'https://api.mangadex.org';
+const API_BASE_URL = '/mangadex-api';
 const COVER_BASE_URL = 'https://uploads.mangadex.org/covers';
 
 export const fetchMangaList = async (params: string = ''): Promise<Manga[]> => {
